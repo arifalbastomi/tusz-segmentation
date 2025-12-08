@@ -1,6 +1,9 @@
 myenv/
 train/
+venv/
 processed_data/
+dev/
+eval/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/

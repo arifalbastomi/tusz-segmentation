@@ -53,10 +53,9 @@ def process_dataset(root_dir, output_dir, limit=None):
             continue
             
         try:
-            segments = dataset.extract_segments(raw, annotations)
-            
             # Save each segment
-            for j, seg in enumerate(segments):
+            # segments is now a generator
+            for j, seg in enumerate(dataset.extract_segments(raw, annotations)):
                 label = seg['label'].lower().strip() # Normalize label
                 
                 # Filter out background
@@ -86,8 +85,7 @@ def process_dataset(root_dir, output_dir, limit=None):
         
         # Explicit cleanup
         if 'raw' in locals(): del raw
-        if 'segments' in locals(): del segments
-        # import gc; gc.collect() 
+        import gc; gc.collect() 
 
     print("\n--- Processing Complete ---")
     print(f"Sessions Processed: {success_count}")
@@ -97,8 +95,8 @@ def process_dataset(root_dir, output_dir, limit=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process TUSZ dataset into .npy files")
-    parser.add_argument("--root", type=str, default="../train", help="Path to TUSZ train directory")
-    parser.add_argument("--output", type=str, default="../processed_data/train", help="Output directory")
+    parser.add_argument("--root", type=str, default="../dev", help="Path to TUSZ train directory")
+    parser.add_argument("--output", type=str, default="../processed_data/dev", help="Output directory")
     parser.add_argument("--limit", type=int, help="Limit number of sessions to process")
     
     args = parser.parse_args()

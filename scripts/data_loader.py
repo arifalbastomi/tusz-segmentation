@@ -81,10 +81,8 @@ class TUSZDataset:
                 - 'channels': channel names
         """
         if raw is None or annotations is None:
-            return []
+            return
 
-        segments = []
-        
         # We need to make sure we don't request times beyond the file duration
         max_time = raw.times[-1]
 
@@ -112,18 +110,16 @@ class TUSZDataset:
                 # start and stop are sample indices
                 data, times = raw.get_data(start=start_idx, stop=stop_idx, return_times=True)
                 
-                segments.append({
+                yield {
                     'data': data,
                     'label': label,
                     'start_time': start,
                     'stop_time': stop,
                     'channels': raw.ch_names
-                })
+                }
             except Exception as e:
                 print(f"Error extracting segment {start}-{stop}: {e}")
                 continue
-
-        return segments
 
 if __name__ == "__main__":
     # fast test
